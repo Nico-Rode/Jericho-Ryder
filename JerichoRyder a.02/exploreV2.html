@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8' />
+    <title>bluejay</title>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="resources/css/explore.css" type="text/css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet"> rel='stylesheet'>
+</head>
+
+<body>
+    <div class='sidebar'>
+        <div class='heading'>
+            <h1>Housing Near You</h1>
+        </div>
+        <div id='listings' class='listings'></div>
+    </div>
+
+    <div id='map' class='map'> </div>
+    <script type="text/javascript" src="resources/js/geodata.js"></script>
+    <script class="remove_element">
+        // This will let you use the .remove() function later on
+        if (!('remove' in Element.prototype)) {
+            Element.prototype.remove = function() {
+                if (this.parentNode) {
+                    this.parentNode.removeChild(this);
+                }
+            };
+        }
+
+    </script>
+
+    <script class="initialize_map">
+        mapboxgl.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2lqbmpqazdlMDBsdnRva284cWd3bm11byJ9.V6Hg2oYJwMAxeoR9GEzkAA';
+
+        // This adds the map to your page
+        var map = new mapboxgl.Map({
+            // container id specified in the HTML
+            container: 'map',
+            // style URL
+            style: 'mapbox://styles/mapbox/streets-v9',
+            // initial position in [long, lat] format
+            center: [-117.41786230000002, 47.75487280000001],
+            // initial zoom
+            zoom: 13
+        });
+
+        map.addControl(new mapboxgl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: true
+            },
+            trackUserLocation: true
+        }));
+
+    </script>
+
+    <script class="load_data">
+        // This adds the data to the map
+        map.on('load', function(e) {
+            // Add the data to your map as a layer
+            map.addSource("places", {
+                type: 'geojson',
+                data: stores
+            });
+            // Initialize the list
+            buildLocationList(stores);
+        });
+
+    </script>
+
+    <script class="adding_house_icons">
+        stores.features.forEach(function(marker) {
+            var el = document.createElement('div');
+
+            el.className = 'marker';
+
+            new mapboxgl.Marker(el, {
+                    offset: [0, -23]
+                })
+                .setLngLat(marker.geometry.coordinates)
+                .addTo(map);
+
+
+
+            el.addEventListener('click', function(e) {
+                var activeItem = document.getElementsByClassName('active');
+                flyToStore(marker);
+                createPopUp(marker);
+                e.stopPropagation();
+                if (activeItem[0]) {
+                    activeItem[0].classList.remove('actve')
+                }
+                var listing = document.getElementById('listing-' + i);
+                console.log(listing);
+                listing.classList.add('active')
+            });
+        });
+
+    </script>
+
+
+    <script class="popUp_and_flyTo">
+        function flyToStore(currentFeature) {
+            map.flyTo({
+                center: currentFeature.geometry.coordinates,
+                zoom: 15
+            });
+        }
+
+
+        function createPopUp(currentFeature) {
+            var popUps = document.getElementsByClassName('mapboxgl-popup');
+            if (popUps[0]) popUps[0].remove();
+
+
+            var popup = new mapboxgl.Popup({
+                    closeOnClick: false
+                })
+                .setLngLat(currentFeature.geometry.coordinates)
+                .setHTML('<h3>bluejay</h3>' +
+                    '<h4>' + currentFeature.properties.address + '</h4>')
+                .addTo(map);
+        }
+
+    </script>
+
+
+    <script class="create_listings_and_event_listener">
+        function buildLocationList(data) {
+            for (i = 0; i < data.features.length; i++) {
+                // Create an array of all the stores and their properties
+                var currentFeature = data.features[i];
+                // Shorten data.feature.properties to just `prop` so we're not
+                // writing this long form over and over again.
+                var prop = currentFeature.properties;
+                // Select the listing container in the HTML
+                var listings = document.getElementById('listings');
+                // Append a div with the class 'item' for each store 
+                var listing = listings.appendChild(document.createElement('div'));
+                listing.className = 'item';
+                listing.id = "listing-" + i;
+
+                // Create a new link with the class 'title' for each store 
+                // and fill it with the store address
+                var link = listing.appendChild(document.createElement('a'));
+                link.href = '#';
+                link.className = 'title';
+                link.dataPosition = i;
+                link.innerHTML = prop.address;
+
+                // Create a new div with the class 'details' for each store 
+                // and fill it with the city and phone number
+                var details = listing.appendChild(document.createElement('div'));
+                details.innerHTML = prop.city;
+                if (currentFeature.land_lord_details.phoneFormatted) {
+                    details.innerHTML += ' &middot; ' + currentFeature.land_lord_details.phoneFormatted;
+                }
+
+
+                link.addEventListener('click', function(e) {
+                    // Update the currentFeature to the store associated with the clicked link
+                    var clickedListing = data.features[this.dataPosition];
+
+                    // 1. Fly to the point associated with the clicked link
+                    flyToStore(clickedListing);
+
+                    // 2. Close all other popups and display popup for clicked store
+                    createPopUp(clickedListing);
+
+                    // 3. Highlight listing in sidebar (and remove highlight for all other listings)
+                    var activeItem = document.getElementsByClassName('active');
+
+                    if (activeItem[0]) {
+                        activeItem[0].classList.remove('active');
+                    }
+                    this.parentNode.classList.add('active');
+
+                });
+            }
+        }
+
+    </script>
+
+
+
+
+</body>
+
+</html>

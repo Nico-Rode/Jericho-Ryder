@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" type="text/css" href="vendors/css/grid.css">
+        <link rel="stylesheet" type="text/css" href="vendors/css/normalize.css">
+        <link rel="stylesheet" type="text/css" href="resources/css/style.css">
+        <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+        <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.js'></script>
+        <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v0.44.2/mapbox-gl.css' rel='stylesheet' />
+        <title>bluejay</title>
+    
+    </head>
+    
+    <script src='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.min.js'></script>
+    <link rel='stylesheet' href='https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-geocoder/v2.2.0/mapbox-gl-geocoder.css' type='text/css' />
+    <body>
+        
+        <script>
+            L.mapbox.accessToken = 'pk.eyJ1IjoiZXhhbXBsZXMiLCJhIjoiY2lqbmpqazdlMDBsdnRva284cWd3bm11byJ9.V6Hg2oYJwMAxeoR9GEzkAA';
+            var geocoder = L.mapbox.geocoder('mapbox.places'),
+                map = null;
+
+            function showMap(err, data) {
+                // The geocoder can return an area, like a city, or a
+                // point, like an address. Here we handle both cases,
+                // by fitting the map bounds to an area or zooming to a point.
+                if (!map) {
+                    map = L.mapbox.map('map', 'mapbox.streets');
+                }
+
+                if (data.lbounds) {
+                    map.fitBounds(data.lbounds);
+                } else if (data.latlng) {
+                    map.setView([data.latlng[0], data.latlng[1]], 13);
+                }
+            }
+
+
+            function geocodeThis() {
+                var text = document.getElementById('search').value;
+                if (text.length >= 5) {
+                    geocoder.query(text, showMap);
+                }
+            }
+            
+            
+        </script>
+        
+        
+        
+        <header>
+            <nav>
+                <div class="row">
+                    <h3 class="company-name">bluejay</h3>
+                    <ul class="main-nav">
+                        <li><a href="#">About us</a></li>
+                        <li><a href="form-fillout.html">Fill out a form</a></li>
+                        <li><a href="#">Sign up</a></li>
+                        <li><a href="#">Login in</a></li>
+                    
+                    </ul>
+                        
+                </div>
+            
+            </nav>
+            
+            
+            <div class="hero-text-box">
+                <h1>A birds eye view of housing</h1>
+                <a class="btn nav-btn btn-full" href="#">Sign up</a>
+                <a class="btn btn-ghost" href="exploreV2.html">Log in</a>
+                <div id='map'></div>
+                <input type='text' oninput='geocodeThis()' id='search'>
+                
+            
+            </div>
+        
+        </header>
+
+        
+        
+        
+    
+    </body>
+
+
+
+
+
+
+</html>
+
