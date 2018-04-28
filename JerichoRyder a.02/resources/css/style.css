@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+
+/*------------------------------------------------------------*/
+/* MAIN SETUP FOR CONTAIN OF HTML*/
+/*------------------------------------------------------------*/
+html {
+    background-color: #fff;
+    color: #ffffff;
+    font-family: 'Raleway', sans-serif;
+    font-weight: 300;
+    font-size: 20px;
+    text-rendering: optimizeLegibility;
+}
+
+
+/*------------------------------------------------------------*/
+/*RESUABLE COMPONENTS*/
+/*------------------------------------------------------------*/
+
+.row {
+    max-width: 1140px; 
+    margin: 0 auto;     /*used to center box within another box*/
+}
+
+
+/*------------------------------------------------------------*/
+/*HERO TEXT AND IMAGE*/
+/*------------------------------------------------------------*/
+
+header {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.0),rgba(0, 0, 0, 0.6)),url(img/apartment-balcony-buildings-439391.jpg);
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+}
+
+.hero-text-box {
+    position: absolute;
+    width: 1140;
+    top: 57%;
+    left:48%;
+    transform: translate(-87%, 90%);
+
+}
+
+
+/*------------------------------------------------------------*/
+/*HEADINGS*/
+/*------------------------------------------------------------*/
+
+h1 {
+    margin: 0px;
+    margin-top: 0px;
+    margin-bottom: 7px;
+    color: white;
+    font-size: 200%;
+    font-weight: 300;
+}
+
+
+/*------------------------------------------------------------*/
+/*NAVBAR*/
+/*------------------------------------------------------------*/
+
+.desktop-header-bar {
+    background-color: #154e83;
+    height: 50px;
+    width: 100%;
+    font-size: 30px;
+    
+}
+
+.main-nav {
+    float: right;
+    list-style: none;
+    margin-top: 14px;
+    
+}
+
+.main-nav li{
+    display: inline-block;
+    margin-left: 30px;
+}
+
+.main-nav li a:hover,
+.main-nav li a:active {
+    border-bottom: 2px solid white;
+    transition: border 0.25s;
+}
+
+.main-nav li a:visited,
+.main-nav li a:link{
+    color: white;
+    text-decoration: none;
+
+}
+
+
+
+
+/*------------------------------------------------------------*/
+/*BUTTONS*/
+/*------------------------------------------------------------*/
+
+
+.btn:link,
+.btn:visited {
+    display: inline-block;
+    padding: 10px 10px;
+    font-weight: 300px;
+    text-decoration: none;
+    border-radius: 10px;
+    color: white;
+    transition: background-color 0.25s, border 0.25s;
+}
+
+.btn-full:link,
+.btn-full:visited {
+    background-color: #3066be;
+    border: 2px solid #3066be;
+}
+
+.btn-ghost:link,
+.btn-ghost:visited {
+    border: 2px solid #fff;
+    color: #fff;
+}
+
+.btn:hover,
+.btn:active {
+    background-color: #2C5DAD;
+    border-color: #2C5DAD;
+}
+
+
+/*------------------------------------------------------------*/
+/*MISC*/
+/*------------------------------------------------------------*/
+.company_name {
+    background-color: white
+}
+
+.company-name {
+    float: left;
+    margin-top: 10px;
+}
+
+.geocoder {
+        position:absolute;
+        z-index:1;
+        width:50%;
+        left:50%;
+        margin-left:-25%;
+        top:20px;
+    }
+
+
+
+
+#map {
+    
+}
